@@ -18,4 +18,5 @@ let create name x y =
   Collision_S.register e;
   Draw_S.register e;
   e
+
 let _is_wall e = Entity.Table.mem walls e

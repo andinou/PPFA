@@ -61,20 +61,28 @@ sig
   val draw_image : render -> image -> int -> int -> unit
   (** draw_image r i x y 
       draws image i on surface r at point (x,y) *)
+  
   val draw_image_scale : render -> image -> int -> int -> int -> int -> unit
  (** draw_image_scale r i dx dy dw dh 
       draws image i on surface r at point (dx,dy) with stretching it to dw width and dh height *)
+  
   val draw_image_full : render -> image -> int -> int -> int -> int -> int -> int -> int -> int -> unit
  (** draw_image_full r i sx sy sw sh dx dy dw dh 
       draws image extracted from i at point (sx, sy) with dimensions (sw, sh)
       on surface r at point (dx,dy) with stretching it to dw width and dh height *)
 
-  val draw_text : render -> string -> int -> int -> string -> unit
+  val draw_text : render -> string -> int -> int -> string -> color -> unit
   (** draw_text r t x y f
       draws text t on render surface r at coordinates x y.
       f is a string describing the font, for instance "30px Arial"
    *)
 
+  val measure_text : render -> string -> string -> int
+  (**
+    mesure_text r text font
+    Returns the width taken by the given text, when
+    written with the given font on the given render
+  *)
   val poll_event : unit -> event
   (** Returns the next event in the event queue *)
 
@@ -88,3 +96,7 @@ sig
   val debug : string -> unit 
   (** Print a debugging message *)
 end
+
+
+
+

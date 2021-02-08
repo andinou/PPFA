@@ -87,13 +87,20 @@ let draw_image_full (ctx : render) img sx sy sw sh dx dy dw dh =
   (float sx) (float sy) (float sw) (float sh)
   (float dx) (float dy) (float dw) (float dh)
 
-let draw_text (ctx : render) text x y font =
+let draw_text (ctx : render) text x y font color =
   ctx ##. font := Js.string font;
+  ctx ##. fillStyle := Js.string color;
   ctx ## fillText (Js.string text) (float x) (float y)
+
+let measure_text (ctx : render) text font =
+  ctx ##. font := Js.string font;
+  let m = ctx ## measureText (Js.string text) in
+  int_of_float (m ##. width)
 
 let poll_event () =
   if Queue.is_empty events then Gfx_base.NoEvent
   else Queue.pop events
+
 
 let main_loop f =
   let cb = ref (Js.wrap_callback (fun _ -> ())) in
@@ -102,7 +109,7 @@ let main_loop f =
         ignore (Dom_html.window ## requestAnimationFrame (!cb))
   in
   cb := Js.wrap_callback loop;
-  ignore (Dom_html.window ## requestAnimationFrame !cb)
+  ignore(Dom_html.window ## requestAnimationFrame !cb)
 
 let debug msg =
   Firebug.console ## log (Js.string msg)

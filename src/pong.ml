@@ -8,6 +8,7 @@ let wall_top = Wall.create "wall_top" 0.0 0.0
 let wall_bottom = Wall.create "wall_bottom" 0.0 580.0
 let iwall_left = Score_zone.create "wall_left" player2 0.0 20.0
 let iwall_rght = Score_zone.create "wall_right" player1 760.0 20.0
+let rock = Rock.create "rock" 400.0 300.0
 
 let ball = Ball.create "ball" Globals.ball_player1_init_x Globals.ball_init_y
 
@@ -25,7 +26,7 @@ let () =
   Input_handler.register_command (KeyDown "n") (fun () -> Ball.launch ball);
 
   Game_state.init ball player1 player2
-
+  
 (* *)
 let init () = System.init_all ()
 
@@ -43,6 +44,17 @@ let update dt =
   System.update_all dt;
   (* Repeat indefinitely *)
   true
+ 
+let chain_functions f_list =
+    let funs = ref f_list in 
+    fun dt -> match !funs with
+    |[]-> false
+    |f::ll -> if f dt then true 
+    else begin
+    funs := ll;
+    true
+    end
+
 
 let update_loop () = Gfx.main_loop update
 
